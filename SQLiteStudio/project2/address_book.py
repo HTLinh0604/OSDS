@@ -153,7 +153,7 @@ def chinh_sua():
         zipcode_editor.insert(0, record[6])
 
     edit_btn = Button(editor, text="Lưu bản ghi", command=cap_nhat)
-    edit_btn.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=145)
+    edit_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10, ipadx=145)
 
 def cap_nhat():
     conn = sqlite3.connect('address_book.db')
@@ -185,7 +185,14 @@ def cap_nhat():
     # Cập nhật lại danh sách bản ghi sau khi chỉnh sửa
     truy_van()
 
-
+def chon(event):
+    # Lấy thông tin bản ghi được chọn
+    ID_object = tree.focus() 
+    ID_value = tree.item(ID_object, 'values')
+    # Cập nhật ID của bản ghi vào delete_box
+    if ID_value:
+        delete_box.delete(0, END) #tạo lại form
+        delete_box.insert(0, ID_value[0])
 # Khung cho các ô nhập liệu
 input_frame = Frame(root)
 input_frame.pack(pady=10)
@@ -247,7 +254,8 @@ for column in columns:
     tree.column(column, anchor=CENTER) # This will center text in rows
     tree.heading(column, text=column)
 tree.pack()
-
+# Gọi hàm này khi người dùng chọn bản ghi trong Treeview
+tree.bind("<<TreeviewSelect>>", chon)
 # Định nghĩa tiêu đề cho các cột
 for col in columns:
     tree.heading(col, text=col)
